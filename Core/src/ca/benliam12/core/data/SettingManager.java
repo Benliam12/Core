@@ -48,7 +48,7 @@ public class SettingManager
 	}
 	
 	@SuppressWarnings("unused")
-	private void DeleteFile(File f)
+	private void deleteFile(File f)
 	{
 		if(f.exists())
 		{
