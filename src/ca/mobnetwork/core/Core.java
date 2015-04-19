@@ -1,15 +1,13 @@
-package ca.benliam12.core;
+package ca.mobnetwork.core;
 
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import ca.benliam12.core.commands.Commands;
-import ca.benliam12.core.data.SettingManager;
-import ca.benliam12.core.listeners.PlayerListener;
-import ca.benliam12.core.scoreboard.CoreScoreBoardManager;
-import ca.benliam12.core.sessions.SessionManager;
+import ca.mobnetwork.core.commands.Commands;
+import ca.mobnetwork.core.listeners.PlayerListener;
+import ca.mobnetwork.core.sessions.SessionManager;
 
 
 
@@ -17,7 +15,6 @@ public class Core extends JavaPlugin
 {	
 	private SessionManager sessionManager = SessionManager.getInstance();
 	private SettingManager settingManager = SettingManager.getInstance();
-	private CoreScoreBoardManager coreScoreBoardManager = CoreScoreBoardManager.getInstance();
 
 	public static Logger log = Logger.getLogger("minecraft");
 	
@@ -26,7 +23,6 @@ public class Core extends JavaPlugin
 		Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		this.settingManager.setup();
 		this.sessionManager.setup();
-		this.coreScoreBoardManager.setup();
 		getCommand("setgroup").setExecutor(new Commands());
 	}
 	
@@ -35,9 +31,6 @@ public class Core extends JavaPlugin
 
 	}
 	
-	/*
-	 * Getters
-	 */
 	public SettingManager getSettingManager()
 	{
 		return this.settingManager;

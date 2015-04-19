@@ -1,4 +1,4 @@
-package ca.benliam12.core.sessions;
+package ca.mobnetwork.core.sessions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +8,7 @@ import java.util.UUID;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import ca.benliam12.core.data.SettingManager;
-import ca.benliam12.core.exeptions.SessionException;
+import ca.mobnetwork.core.SettingManager;
 
 public class Session
 {

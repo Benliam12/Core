@@ -1,11 +1,9 @@
-package ca.benliam12.core.sessions;
+package ca.mobnetwork.core.sessions;
 
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import ca.benliam12.core.exeptions.SessionException;
 
 public class SessionManager {
 

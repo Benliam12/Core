@@ -1,6 +1,5 @@
-package ca.benliam12.core.exeptions;
+package ca.mobnetwork.core.sessions;
 
-import ca.benliam12.core.sessions.Session;
 
 @SuppressWarnings("serial")
 public class SessionException extends Exception

@@ -1,4 +1,4 @@
-package ca.benliam12.core.commands;
+package ca.mobnetwork.core.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,9 +9,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import ca.benliam12.core.data.SettingManager;
-import ca.benliam12.core.sessions.Session;
-import ca.benliam12.core.sessions.SessionManager;
+import ca.mobnetwork.core.SettingManager;
+import ca.mobnetwork.core.sessions.Session;
+import ca.mobnetwork.core.sessions.SessionManager;
 
 public class Commands implements CommandExecutor
 {

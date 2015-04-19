@@ -1,4 +1,4 @@
-package ca.benliam12.core.data;
+package ca.mobnetwork.core;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -8,8 +8,6 @@ import java.util.Map.Entry;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-import ca.benliam12.core.Core;
 
 
 public class SettingManager 
