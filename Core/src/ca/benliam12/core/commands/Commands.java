@@ -1,6 +1,8 @@
 package ca.benliam12.core.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,6 +16,7 @@ import ca.benliam12.core.sessions.SessionManager;
 public class Commands implements CommandExecutor
 {
 	SessionManager sessionManager = SessionManager.getInstance();
+	SettingManager settingManager = SettingManager.getInstance();
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(sender instanceof Player)
@@ -23,14 +26,35 @@ public class Commands implements CommandExecutor
 			{
 				if(args.length == 2)
 				{
-					Session session = this.sessionManager.getSession(args[0]);
-					if(session != null && player.isOp())
+					if(player.isOp())
 					{
-						FileConfiguration config = (FileConfiguration) session.getData("core-file");
-						config.set("infos.group", args[0]);
-						SettingManager.getInstance().saveConfig(args[0], config);
-						session.updateData("srv-group", args[1]);
-						player.sendMessage(ChatColor.GREEN + args[0] + ChatColor.GRAY + " is now " + ChatColor.GOLD + args[1]);
+						@SuppressWarnings("deprecation")
+						OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
+						FileConfiguration config = null;
+						if(target.isOnline())
+						{
+							Session session = this.sessionManager.getSession(target.getName());
+							config = (FileConfiguration) session.getData("core-file");
+							config.set("infos.group", args[1]);
+							session.updateData("srv-group", args[1]);
+							this.settingManager.saveConfig(target.getUniqueId().toString(), config);
+						}
+						else
+						{
+							if(this.settingManager.getConfig(target.getUniqueId().toString()) != null)
+							{
+								config = this.settingManager.getConfig(target.getUniqueId().toString());
+							}
+							else
+							{
+								this.settingManager.addConfig(target.getUniqueId().toString(), "plugins/Core/data/players");
+								config = this.settingManager.getConfig(target.getUniqueId().toString());
+							}
+							config.set("infos.group", args[1]);
+							this.settingManager.saveConfig(target.getUniqueId().toString(), config);
+						}
+						
+						player.sendMessage(ChatColor.GREEN + target.getName() + ChatColor.GRAY + " is now " + ChatColor.GOLD + args[1]);
 					}
 					else
 					{
