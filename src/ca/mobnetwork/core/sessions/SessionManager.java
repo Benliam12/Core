@@ -80,7 +80,7 @@ public class SessionManager {
 	
 	/**
 	 * Get a specific session
-	 * @param sessionkey Usename of the player is use as the sessionkey
+	 * @param sessionkey Username of the player is use as the sessionkey
 	 * @return The session asked or null if not exits
 	 */
 	public Session getSession(String sessionkey)
