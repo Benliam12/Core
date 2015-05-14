@@ -5,11 +5,14 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import ca.mobnetwork.core.events.AddSessionEvent;
+
 public class SessionManager {
 
 	private static SessionManager instance = new SessionManager();
 	
 	private HashMap<String,Session> sessions = new HashMap<String,Session>();
+	private SessionCleaner sessionCleaner;
 	
 	public static SessionManager getInstance()
 	{
@@ -29,13 +32,27 @@ public class SessionManager {
 				
 			}
 		}
+		this.sessionCleaner = new SessionCleaner();
+		Thread thread = new Thread(this.sessionCleaner);
+		thread.start();
+	}
+	
+	public void end()
+	{
+		this.sessionCleaner.end();
 	}
 	
 	public void addSession(String name) throws SessionException
 	{
 		if(!this.isSession(name))
 		{
-			this.sessions.put(name,new Session(Bukkit.getPlayer(name)));
+			Session session = new Session(Bukkit.getPlayer(name));
+			AddSessionEvent addSessionEvent = new AddSessionEvent(session);
+			Bukkit.getPluginManager().callEvent(addSessionEvent);
+			if(!addSessionEvent.isCancelled())
+			{
+				this.sessions.put(name,session);	
+			}
 		}
 		else
 		{

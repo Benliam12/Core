@@ -1,6 +1,6 @@
 name : Core
 version : 1.0b
 author : Benliam12
-main : ca.benliam12.core.Core
+main : ca.mobnetwork.core.Core
 commands :
   setgroup:

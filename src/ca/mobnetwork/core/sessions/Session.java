@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -92,6 +93,16 @@ public class Session
 	public boolean isData(String datakey)
 	{
 		return this.data.containsKey(datakey);
+	}
+	
+	public boolean isOnline()
+	{
+		Player player = Bukkit.getPlayer(this.name);
+		if(player != null)
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	public Object getData(String datakey)
