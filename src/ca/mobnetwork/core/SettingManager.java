@@ -83,6 +83,7 @@ public class SettingManager
 		createDirectory("plugins/Core");
 		createDirectory("plugins/Core/data");
 		createDirectory("plugins/Core/data/players");
+		addConfig("config","plugin/Core");
 	}
 	/*
 	 * Configuration interactions
