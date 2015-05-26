@@ -19,6 +19,9 @@ public class SessionManager {
 		return instance;
 	}
 	
+	/**
+	 * Method to run when server enabling
+	 */
 	public void setup()
 	{
 		for(Player player : Bukkit.getOnlinePlayers())
@@ -37,11 +40,19 @@ public class SessionManager {
 		thread.start();
 	}
 	
+	/**
+	 * Method to run when server disabling
+	 */
 	public void end()
 	{
 		this.sessionCleaner.end();
 	}
 	
+	/**
+	 * Add a new session 
+	 * @param name Player's name
+	 * @throws SessionException if session already exists
+	 */
 	public void addSession(String name) throws SessionException
 	{
 		if(!this.isSession(name))
@@ -56,10 +67,15 @@ public class SessionManager {
 		}
 		else
 		{
-			throw new SessionException("The session already exists !");
+			throw new SessionException("The session already exists !", this.getSession(name));
 		}
 	}
 	
+	/**
+	 * Remove a session from the current server
+	 * @param name Player's name
+	 * @throws SessionException if session doesn't exists 
+	 */
 	public void removeSession(String name) throws SessionException
 	{
 		if(this.isSession(name))

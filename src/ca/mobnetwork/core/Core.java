@@ -15,8 +15,8 @@ import ca.mobnetwork.core.sessions.SessionManager;
 
 public class Core extends JavaPlugin
 {	
-	private SessionManager sessionManager = SessionManager.getInstance();
-	private SettingManager settingManager = SettingManager.getInstance();
+	private SessionManager sessionManager;
+	private SettingManager settingManager;
 	private DataBase dataBase = DataBase.getInstance();
 
 
@@ -24,26 +24,32 @@ public class Core extends JavaPlugin
 	
 	public void onEnable()
 	{
+		this.sessionManager = SessionManager.getInstance();
+		this.settingManager = SettingManager.getInstance();
+		this.dataBase = DataBase.getInstance();
+		
 		Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		this.settingManager.setup();
 		this.dataBase.setup();
+		this.sessionManager.setup();
 		
 		if(!this.dataBase.isConnect("main"))
 		{
 			log.info("Couldn't connect to main database !");
 			Bukkit.getServer().getPluginManager().disablePlugin(this);
+			return;
 		}
 		Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		Bukkit.getMessenger().registerIncomingPluginChannel(this, "MobNetwork", new MessageListener());
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "MobNetwork");
-		this.sessionManager.setup();
 		getCommand("setgroup").setExecutor(new Commands());
 	}
 	
 	public void onDisable()
 	{
-
+		SessionManager.getInstance().end();
+		DataBase.getInstance().end();
 	}
 	
 	public SettingManager getSettingManager()

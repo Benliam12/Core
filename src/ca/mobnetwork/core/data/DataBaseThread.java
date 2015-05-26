@@ -26,14 +26,15 @@ public class DataBaseThread extends Thread
 		while(this.running)
 		{
 			Core.log.info("-----------------------------------");
-			Core.log.info("[Stats] Deconnexion to DataBases...");
+			Core.log.info("[Core] Deconnexion to DataBases...");
 			this.dataBase.closeConnexions();
-			Core.log.info("[Stats] Connexion to DataBases...");
+			Core.log.info("[Core] Connexion to DataBases...");
 			this.dataBase.load();
-			Core.log.info("[Stats] DataBases connected !");
+			Core.log.info("[Core] DataBases connected !");
 			if(!this.dataBase.isConnect("main"))
 			{
-				Core.log.info("[Stats] Cannot connect to main DataBase ! Plugin is now disabling");
+				Core.log.info("[Core] Cannot connect to main DataBase ! Plugin is now disabling");
+				this.running = false;
 				Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("Core"));
 			}
 			Core.log.info("-----------------------------------");

@@ -1,6 +1,5 @@
 package ca.mobnetwork.core.sessions;
 
-
 @SuppressWarnings("serial")
 public class SessionException extends Exception
 {

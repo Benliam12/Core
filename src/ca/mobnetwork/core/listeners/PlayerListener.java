@@ -20,7 +20,11 @@ public class PlayerListener implements Listener
 		}
 		catch(SessionException sessionException)
 		{
-			
+			if(sessionException.getSession() != null)
+			{
+				sessionException.getSession().checkUp();
+			}
+			// Session has not expired
 		}
 	}
 	
