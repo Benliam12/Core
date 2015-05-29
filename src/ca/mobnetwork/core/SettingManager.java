@@ -45,7 +45,6 @@ public class SettingManager
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	private void deleteFile(File f)
 	{
 		if(f.exists())
@@ -177,7 +176,7 @@ public class SettingManager
 		{
 			try
 			{
-				this.getFile(name).delete();
+				this.deleteFile(this.getFile(name));
 				this.removeConfig(name);
 			}
 			catch (Exception ex)
@@ -329,7 +328,6 @@ public class SettingManager
 		} 
 		else
 		{
-			Core.log.info("Config : " + name + " = null");
 			return null;
 		}
 	}

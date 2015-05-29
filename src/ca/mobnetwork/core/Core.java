@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import ca.mobnetwork.core.commands.Commands;
 import ca.mobnetwork.core.data.DataBase;
+import ca.mobnetwork.core.group.GroupManager;
 import ca.mobnetwork.core.listeners.PlayerListener;
 import ca.mobnetwork.core.messaging.MessageListener;
 import ca.mobnetwork.core.sessions.SessionManager;
@@ -17,8 +18,8 @@ public class Core extends JavaPlugin
 {	
 	private SessionManager sessionManager;
 	private SettingManager settingManager;
-	private DataBase dataBase = DataBase.getInstance();
-
+	private DataBase dataBase;
+	private GroupManager groupManager;
 
 	public static Logger log = Logger.getLogger("minecraft");
 	
@@ -27,11 +28,13 @@ public class Core extends JavaPlugin
 		this.sessionManager = SessionManager.getInstance();
 		this.settingManager = SettingManager.getInstance();
 		this.dataBase = DataBase.getInstance();
+		this.groupManager = GroupManager.getInstance();
 		
 		Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		this.settingManager.setup();
 		this.dataBase.setup();
-		this.sessionManager.setup();
+		
+		
 		
 		if(!this.dataBase.isConnect("main"))
 		{
@@ -44,6 +47,8 @@ public class Core extends JavaPlugin
 		Bukkit.getMessenger().registerIncomingPluginChannel(this, "MobNetwork", new MessageListener());
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "MobNetwork");
 		getCommand("setgroup").setExecutor(new Commands());
+		this.groupManager.setup();
+		this.sessionManager.setup();
 	}
 	
 	public void onDisable()
@@ -65,5 +70,10 @@ public class Core extends JavaPlugin
 	public DataBase getDataBaseManager()
 	{
 		return this.dataBase;
+	}
+	
+	public GroupManager getGroupManager()
+	{
+		return this.groupManager;
 	}
 }

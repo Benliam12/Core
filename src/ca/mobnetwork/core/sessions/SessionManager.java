@@ -1,6 +1,7 @@
 package ca.mobnetwork.core.sessions;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -102,6 +103,22 @@ public class SessionManager {
 	public Session getSession(String sessionkey)
 	{
 		return this.sessions.get(sessionkey);
+	}
+	
+	public Session getSession(String param, boolean useUUID)
+	{
+		if(!useUUID)
+		{
+			return this.getSession(param);
+		}
+		for(Entry<String, Session> session : this.sessions.entrySet())
+		{
+			if(session.getValue().getUUID().equalsIgnoreCase(param))
+			{
+				return session.getValue();
+			}
+		}
+		return null;
 	}
 	
 	/**

@@ -21,7 +21,6 @@ public class Rank
 		this.format = format;
 	}
 	
-	
 	public String getRawFormat()
 	{
 		return this.format;

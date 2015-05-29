@@ -5,9 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
-import net.md_5.bungee.api.ChatColor;
+
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import ca.mobnetwork.core.SettingManager;
@@ -43,23 +44,22 @@ public class Session
 			PreparedStatement request = this.dataBase.prepareStatement("SELECT * FROM `users` WHERE uuid = ?");
 			request.setString(1, player.getUniqueId().toString());
 			ResultSet result = request.executeQuery();
-			result.next();
-			if(result.getString("uuid") == null)
+			boolean exist = result.next();
+			if(!exist)
 			{
-				String req = "INSERT INTO `users` VALUES(0,?,0,0,0,0,0,0))";
-				PreparedStatement insert = this.dataBase.prepareStatement(req);
-				insert.setString(1, player.getUniqueId().toString());
-				insert.executeUpdate();
-				
 				try
 				{
-					int rankId = Integer.parseInt(result.getString("rank"));
-					this.putData("rank", this.groupManager.getRank(rankId));
+					String req = "INSERT INTO `users` VALUES(0,?,0,0,0,0,0,0)";
+					PreparedStatement insert = this.dataBase.prepareStatement(req);
+					insert.setString(1, player.getUniqueId().toString());
+					insert.executeUpdate();
+					this.putData("rank", this.groupManager.getRank(0));
 				}
 				catch (Exception ex)
 				{
 					player.kickPlayer(ChatColor.RED + "Error has occured !");
 				}
+			
 			}
 			else
 			{
@@ -177,6 +177,11 @@ public class Session
 	public String getName()
 	{
 		return this.name;
+	}
+	
+	public String getUUID()
+	{
+		return this.uuid;
 	}
 	
 }

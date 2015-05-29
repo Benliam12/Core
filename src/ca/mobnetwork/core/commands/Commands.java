@@ -1,22 +1,22 @@
 package ca.mobnetwork.core.commands;
 
+import java.sql.SQLException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import ca.mobnetwork.core.SettingManager;
-import ca.mobnetwork.core.sessions.Session;
-import ca.mobnetwork.core.sessions.SessionManager;
+import ca.mobnetwork.core.group.GroupManager;
+import ca.mobnetwork.core.group.RankException;
 
 public class Commands implements CommandExecutor
 {
-	SessionManager sessionManager = SessionManager.getInstance();
-	SettingManager settingManager = SettingManager.getInstance();
+	private GroupManager groupManager = GroupManager.getInstance();
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(sender instanceof Player)
@@ -30,40 +30,62 @@ public class Commands implements CommandExecutor
 					{
 						@SuppressWarnings("deprecation")
 						OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
-						FileConfiguration config = null;
-						if(target.isOnline())
+						if(!target.isOnline())
 						{
-							Session session = this.sessionManager.getSession(target.getName());
-							config = (FileConfiguration) session.getData("core-file");
-							config.set("infos.group", args[1]);
-							session.updateData("srv-group", args[1]);
-							this.settingManager.saveConfig(target.getUniqueId().toString(), config);
-						}
-						else
-						{
-							if(this.settingManager.getConfig(target.getUniqueId().toString()) != null)
-							{
-								config = this.settingManager.getConfig(target.getUniqueId().toString());
-							}
-							else
-							{
-								this.settingManager.addConfig(target.getUniqueId().toString(), "plugins/Core/data/players");
-								config = this.settingManager.getConfig(target.getUniqueId().toString());
-							}
-							config.set("infos.group", args[1]);
-							this.settingManager.saveConfig(target.getUniqueId().toString(), config);
+							this.groupManager.checkUpUser(target.getUniqueId().toString(), true);
 						}
 						
-						player.sendMessage(ChatColor.GREEN + target.getName() + ChatColor.GRAY + " is now " + ChatColor.GOLD + args[1]);
+						try 
+						{
+							this.groupManager.setUserGroup(target.getUniqueId().toString(), args[1]);
+						} 
+						catch (RankException e)
+						{
+							player.sendMessage(ChatColor.RED + "Could set the group ! (" + e.getMessage() +")");
+							return true;
+						}
+						player.sendMessage(ChatColor.GREEN + "Player : " + ChatColor.GOLD + target.getName() + ChatColor.GREEN + "is now + " + ChatColor.GOLD + args[2]);
 					}
 					else
 					{
-						player.sendMessage("User not found");
+						player.sendMessage(ChatColor.RED + "You don't have the permission to perform this command !");
 					}
+				}
+				else
+				{
+					player.sendMessage(ChatColor.RED + "Wrong usage !");
+				}
+			}
+			else if(label.equalsIgnoreCase("creategroup"))
+			{
+				if(args.length == 1)
+				{
+					if(player.isOp())
+					{
+						try 
+						{
+							this.groupManager.createGroup(args[0]);
+							player.sendMessage(ChatColor.GREEN + "Group created !");
+						}
+						catch (RankException e) 
+						{
+							player.sendMessage(ChatColor.RED + e.getMessage());
+						} catch (SQLException e) 
+						{
+							player.sendMessage(ChatColor.RED + "SQL ERROR : " + e.getMessage());
+						}
+					}
+					else
+					{
+						player.sendMessage(ChatColor.RED + "You don't have the permission to perform this command !");
+					}
+				}
+				else
+				{
+					player.sendMessage(ChatColor.RED + "Wrong usage !");
 				}
 			}
 		}
-		
 		return false;
 	}
 	
