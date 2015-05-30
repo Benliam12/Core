@@ -19,6 +19,7 @@ public class GroupManager
 	private static GroupManager groupManager = new GroupManager();
 	private ArrayList<Rank> ranks = new ArrayList<>();
 	private DataBase dataBase = DataBase.getInstance();
+	private GroupChecker groupChecker;
 	
 	public static GroupManager getInstance()
 	{
@@ -29,6 +30,21 @@ public class GroupManager
 	
 	public void setup()
 	{
+		this.groupChecker = new GroupChecker();
+		Thread thread = new Thread(this.groupChecker);
+		thread.start();
+		this.reload();
+	}
+	
+	public void end()
+	{
+		this.groupChecker.setRunning(false);
+	}
+	
+	public void reload()
+	{
+		Core.log.info("Cleaning ranks...");
+		this.ranks.clear();
 		try
 		{
 			String sql = "SELECT * FROM `rank`";
@@ -82,10 +98,10 @@ public class GroupManager
 			PreparedStatement request = this.dataBase.getConnection("main").prepareStatement(sql);
 			request.setString(1, uuid);
 			ResultSet result = request.executeQuery();
-			result.next();
-			if(result.getString("uuid") == null)
+			boolean isResult = result.next();
+			if(!isResult)
 			{
-				String req = "INSERT INTO `users` VALUES(0,?,0,0,0,0,0,0))";
+				String req = "INSERT INTO `users` VALUES(0,?,0,0,0,0,0,0)";
 				PreparedStatement insert = this.dataBase.getConnection("main").prepareStatement(req);
 				insert.setString(1, uuid);
 				insert.executeUpdate();
@@ -93,7 +109,7 @@ public class GroupManager
 		}
 		catch (Exception ex)
 		{
-			
+			ex.printStackTrace();
 		}
 	}
 	

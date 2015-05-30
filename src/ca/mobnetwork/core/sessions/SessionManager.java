@@ -46,7 +46,10 @@ public class SessionManager {
 	 */
 	public void end()
 	{
-		this.sessionCleaner.end();
+		if(this.sessionCleaner != null)
+		{
+			this.sessionCleaner.end();
+		}
 	}
 	
 	/**

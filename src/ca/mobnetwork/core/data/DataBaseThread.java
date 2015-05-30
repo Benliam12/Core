@@ -48,7 +48,7 @@ public class DataBaseThread extends Thread
 			Core.log.info("-----------------------------------");
 			try
 			{
-				Thread.sleep(60000);
+				Thread.sleep(30000);
 			}
 			catch (Exception ex)
 			{

@@ -40,7 +40,7 @@ public class SessionCleaner extends Thread
 			
 			try
 			{
-				Thread.sleep(30000);
+				Thread.sleep(60000);
 			}
 			catch (Exception ex)
 			{

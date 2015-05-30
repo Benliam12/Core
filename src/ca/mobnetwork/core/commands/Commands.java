@@ -44,7 +44,7 @@ public class Commands implements CommandExecutor
 							player.sendMessage(ChatColor.RED + "Could set the group ! (" + e.getMessage() +")");
 							return true;
 						}
-						player.sendMessage(ChatColor.GREEN + "Player : " + ChatColor.GOLD + target.getName() + ChatColor.GREEN + "is now + " + ChatColor.GOLD + args[2]);
+						player.sendMessage(ChatColor.GREEN + "Player : " + ChatColor.GOLD + target.getName() + ChatColor.GREEN + " is now " + ChatColor.GOLD + args[1]);
 					}
 					else
 					{

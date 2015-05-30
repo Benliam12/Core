@@ -55,6 +55,7 @@ public class Core extends JavaPlugin
 	{
 		SessionManager.getInstance().end();
 		DataBase.getInstance().end();
+		GroupManager.getInstance().end();
 	}
 	
 	public SettingManager getSettingManager()
