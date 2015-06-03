@@ -1,6 +1,12 @@
 package ca.mobnetwork.core.group;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import org.bukkit.ChatColor;
+
+import ca.mobnetwork.core.data.DataBase;
 
 public class Rank 
 {
@@ -19,6 +25,55 @@ public class Rank
 		this.color = color;
 		this.prefix = prefix;
 		this.format = format;
+	}
+	
+	public Rank setName(String name)
+	{
+		this.name = name;
+		return this;
+	}
+	
+	public Rank setPrefix(String prefix)
+	{
+		this.prefix = prefix;
+		return this;
+	}
+	
+	public Rank setFormat(String format)
+	{
+		this.format = format;
+		return this;
+	}
+	
+	public void save()
+	{
+		Connection connection = DataBase.getInstance().getConnection("main");
+		try
+		{
+			String sql = "UPDATE `rank` SET name = ?, prefix = ?, format = ?, color = ? WHERE id = ?";
+			PreparedStatement request = connection.prepareStatement(sql);
+			request.setString(1, this.name);
+			request.setString(2, this.prefix);
+			request.setString(3, this.format);
+			request.setString(4, this.color);
+			request.setString(4, Integer.toString(this.id));
+			request.executeUpdate();
+			request.close();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+	
+	public void delete() throws SQLException
+	{
+		Connection connection = DataBase.getInstance().getConnection("main");
+		String sql = "DELETE FROM `rank` WHERE id = ?";
+		PreparedStatement request = connection.prepareStatement(sql);
+		request.setString(1, Integer.toString(this.id));
+		request.executeUpdate();
+		request.close();
 	}
 	
 	public String getRawFormat()

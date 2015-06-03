@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
-
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -14,6 +12,7 @@ import org.bukkit.entity.Player;
 import ca.mobnetwork.core.SettingManager;
 import ca.mobnetwork.core.data.DataBase;
 import ca.mobnetwork.core.group.GroupManager;
+import ca.mobnetwork.core.group.Rank;
 
 public class Session
 {
@@ -66,7 +65,15 @@ public class Session
 				try
 				{
 					int rankId = Integer.parseInt(result.getString("rank"));
-					this.putData("rank", this.groupManager.getRank(rankId));
+					Rank rank = this.groupManager.getRank(rankId);
+					if(rank != null)
+					{
+						this.putData("rank", this.groupManager.getRank(rankId));
+					}
+					else
+					{
+						this.putData("rank", this.groupManager.getRank(0));
+					}
 				}
 				catch (Exception ex)
 				{

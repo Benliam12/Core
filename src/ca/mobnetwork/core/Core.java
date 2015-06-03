@@ -34,19 +34,20 @@ public class Core extends JavaPlugin
 		this.settingManager.setup();
 		this.dataBase.setup();
 		
-		
-		
 		if(!this.dataBase.isConnect("main"))
 		{
 			log.info("Couldn't connect to main database !");
 			Bukkit.getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
+		
 		Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		Bukkit.getMessenger().registerIncomingPluginChannel(this, "MobNetwork", new MessageListener());
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "MobNetwork");
+		
 		getCommand("setgroup").setExecutor(new Commands());
+		
 		this.groupManager.setup();
 		this.sessionManager.setup();
 	}

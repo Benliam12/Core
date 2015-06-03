@@ -62,9 +62,43 @@ public class GroupManager
 				Core.log.info("Add rank : " + name);
 			}
 		}
+		
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
+		}
+	}
+	
+	public String deleteRank(String name) throws RankException
+	{
+		Rank rank = this.getRank(name);
+		if(rank != null)
+		{
+			return this.deleteRank(rank);
+		}
+		throw new RankException("Rank not found !");
+	}
+	
+	public String deleteRank(int id) throws RankException
+	{
+		Rank rank = this.getRank(id);
+		if(rank != null)
+		{
+			return this.deleteRank(rank);
+		}
+		throw new RankException("Rank not found !");
+	}
+	
+	public String deleteRank(Rank rank) throws RankException
+	{
+		try
+		{
+			rank.delete();
+			return rank.getName();
+		}
+		catch (SQLException ex)
+		{
+			throw new RankException("Couldn't delete Rank : " + rank.getName() + " (ERR : "+ ex.getMessage() + ")", rank);
 		}
 	}
 	
@@ -152,6 +186,11 @@ public class GroupManager
 				session.updateData("rank", this.getRank(groupId));
 			}
 		}
+	}
+	
+	public ArrayList<Rank> getRanks()
+	{
+		return this.ranks;
 	}
 	
 	public Rank getRank(String name)

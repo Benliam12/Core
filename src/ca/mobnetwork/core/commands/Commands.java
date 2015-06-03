@@ -85,6 +85,49 @@ public class Commands implements CommandExecutor
 					player.sendMessage(ChatColor.RED + "Wrong usage !");
 				}
 			}
+			else if(label.equalsIgnoreCase("deletegroup"))
+			{
+				if(player.hasPermission("core.deletegroup"))
+				{
+					if(args.length == 1)
+					{
+						try
+						{
+							int GroupID = Integer.parseInt(args[0]);
+							String groupName = this.groupManager.deleteRank(GroupID);
+							player.sendMessage(ChatColor.GREEN + "The " + "'" + groupName + "' group has been deleted !");
+						}
+						catch (RankException ex)
+						{
+							player.sendMessage(ChatColor.RED + ex.getMessage());
+						}
+						catch (Exception ex)
+						{
+							try
+							{
+								String groupName = this.groupManager.deleteRank(args[0]);
+								player.sendMessage(ChatColor.GREEN + "The " + "'" + groupName + "' group has been deleted !");
+							}
+							catch (RankException rankException)
+							{
+								player.sendMessage(ChatColor.RED + rankException.getMessage());
+							}
+							catch (Exception exception)
+							{
+								exception.printStackTrace();
+							}
+						}
+					}
+					else
+					{
+						player.sendMessage("Wrong usage !");
+					}
+				}
+				else
+				{
+					player.sendMessage(ChatColor.RED + "You don't have the permission to perform this command !");
+				}
+			}
 		}
 		return false;
 	}
