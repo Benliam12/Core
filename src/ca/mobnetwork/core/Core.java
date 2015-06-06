@@ -13,7 +13,11 @@ import ca.mobnetwork.core.messaging.MessageListener;
 import ca.mobnetwork.core.sessions.SessionManager;
 
 
-
+/**
+ * Main class
+ * @author Benliam12
+ * @version 1.0
+ */
 public class Core extends JavaPlugin
 {	
 	private SessionManager sessionManager;
@@ -46,7 +50,10 @@ public class Core extends JavaPlugin
 		Bukkit.getMessenger().registerIncomingPluginChannel(this, "MobNetwork", new MessageListener());
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "MobNetwork");
 		
-		getCommand("setgroup").setExecutor(new Commands());
+		Commands commands = new Commands();
+		getCommand("setgroup").setExecutor(commands);
+		getCommand("creategroup").setExecutor(commands);
+		getCommand("deletegroup").setExecutor(commands);
 		
 		this.groupManager.setup();
 		this.sessionManager.setup();

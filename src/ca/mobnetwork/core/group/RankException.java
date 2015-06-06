@@ -1,5 +1,10 @@
 package ca.mobnetwork.core.group;
 
+/**
+ * Rank exception
+ * @author Benliam12
+ * @version 1.0
+ */
 @SuppressWarnings("serial")
 public class RankException extends Exception
 {

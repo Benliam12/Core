@@ -9,7 +9,11 @@ import java.util.Map.Entry;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-
+/**
+ * SettingManager
+ * @author Benliam12
+ * @version 1.0
+ */
 public class SettingManager 
 {
 	private static SettingManager instance = new SettingManager();

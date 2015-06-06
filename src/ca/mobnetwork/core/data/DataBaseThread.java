@@ -4,7 +4,11 @@ import org.bukkit.Bukkit;
 
 import ca.mobnetwork.core.Core;
 
-
+/**
+ * DataBase thread class
+ * @author Benliam12
+ * @version 1.0
+ */
 public class DataBaseThread extends Thread
 {
 

@@ -1,5 +1,10 @@
 package ca.mobnetwork.core.sessions;
 
+/**
+ * Session exceptions
+ * @author Benliam12
+ * @version 1.0
+ */
 @SuppressWarnings("serial")
 public class SessionException extends Exception
 {

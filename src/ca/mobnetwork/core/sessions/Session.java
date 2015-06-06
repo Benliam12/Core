@@ -14,6 +14,11 @@ import ca.mobnetwork.core.data.DataBase;
 import ca.mobnetwork.core.group.GroupManager;
 import ca.mobnetwork.core.group.Rank;
 
+/**
+ * Session object
+ * @author Benliam12
+ * @version 1.0
+ */
 public class Session
 {
 	

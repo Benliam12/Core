@@ -12,7 +12,11 @@ import ca.mobnetwork.core.Core;
 import ca.mobnetwork.core.SettingManager;
 
 
-
+/**
+ * DataBase manager class
+ * @author Benliam12
+ * @version 1.0
+ */
 public class DataBase 
 {
 	private static DataBase db = new DataBase();

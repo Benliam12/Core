@@ -7,6 +7,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import ca.mobnetwork.core.sessions.SessionException;
 import ca.mobnetwork.core.sessions.SessionManager;
 
+/**
+ * Player main listener
+ * @author Benliam12
+ * @version 1.0
+ */
 public class PlayerListener implements Listener
 {
 	private SessionManager sessionManager = SessionManager.getInstance();

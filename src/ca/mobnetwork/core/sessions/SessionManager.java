@@ -8,6 +8,11 @@ import org.bukkit.entity.Player;
 
 import ca.mobnetwork.core.events.AddSessionEvent;
 
+/**
+ * Manager of sessions
+ * @author Benliam12
+ * @version 1.0
+ */
 public class SessionManager {
 
 	private static SessionManager instance = new SessionManager();

@@ -13,6 +13,11 @@ import org.bukkit.entity.Player;
 import ca.mobnetwork.core.group.GroupManager;
 import ca.mobnetwork.core.group.RankException;
 
+/**
+ * Main command class
+ * @author Benliam12
+ * @version 1.0
+ */
 public class Commands implements CommandExecutor
 {
 	private GroupManager groupManager = GroupManager.getInstance();

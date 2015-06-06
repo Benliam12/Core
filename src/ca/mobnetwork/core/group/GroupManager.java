@@ -10,9 +10,15 @@ import org.bukkit.OfflinePlayer;
 
 import ca.mobnetwork.core.Core;
 import ca.mobnetwork.core.data.DataBase;
+import ca.mobnetwork.core.events.ChangeGroupEvent;
 import ca.mobnetwork.core.sessions.Session;
 import ca.mobnetwork.core.sessions.SessionManager;
 
+/**
+ * Group Manager class
+ * @author Benliam12
+ * @version 1.0
+ */
 public class GroupManager 
 {
 
@@ -167,23 +173,28 @@ public class GroupManager
 		}
 		else
 		{
+			ChangeGroupEvent changeGroupEvent = new ChangeGroupEvent(uuid);
+			Bukkit.getPluginManager().callEvent(changeGroupEvent);
+			if(!changeGroupEvent.isCancelled())
+			{
+				try
+				{
+					String sql = "UPDATE users SET `rank` = ? WHERE uuid = ?";
+					PreparedStatement request = this.dataBase.getConnection("main").prepareStatement(sql);
+					request.setString(1, Integer.toString(groupId));
+					request.setString(2, uuid);
+					request.executeUpdate();
+				}
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
+				Session session = SessionManager.getInstance().getSession(uuid,true);
+				if(session != null)
+				{
+					session.updateData("rank", this.getRank(groupId));
+				}
 			
-			try
-			{
-				String sql = "UPDATE users SET `rank` = ? WHERE uuid = ?";
-				PreparedStatement request = this.dataBase.getConnection("main").prepareStatement(sql);
-				request.setString(1, Integer.toString(groupId));
-				request.setString(2, uuid);
-				request.executeUpdate();
-			}
-			catch (Exception ex)
-			{
-				
-			}
-			Session session = SessionManager.getInstance().getSession(uuid,true);
-			if(session != null)
-			{
-				session.updateData("rank", this.getRank(groupId));
 			}
 		}
 	}

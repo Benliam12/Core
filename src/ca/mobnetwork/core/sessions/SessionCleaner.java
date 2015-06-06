@@ -5,6 +5,11 @@ import java.util.Map.Entry;
 
 import ca.mobnetwork.core.Core;
 
+/**
+ * Session cleaner
+ * @author Benliam12
+ * @version 1.0
+ */
 public class SessionCleaner extends Thread
 {
 

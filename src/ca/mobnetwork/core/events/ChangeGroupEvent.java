@@ -1,24 +1,26 @@
 package ca.mobnetwork.core.events;
 
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import ca.mobnetwork.core.sessions.Session;
-
 /**
- * Add Session Event
+ * ChangeGroup event
  * @author Benliam12
  * @version 1.0
  */
-public class AddSessionEvent extends Event
+public class ChangeGroupEvent extends Event
 {
 	private static final HandlerList handlers = new HandlerList();
-	private Session session;
+	private String uuid;
 	private boolean isCancelled = false;
 	
-	public AddSessionEvent(Session session)
+	public ChangeGroupEvent(String uuid)
 	{
-		this.session = session;
+		this.uuid = uuid;
 	}
 	
 	public HandlerList getHandlers() {
@@ -34,9 +36,9 @@ public class AddSessionEvent extends Event
 		this.isCancelled = cancelled;
 	}
 	
-	public Session getSession()
+	public OfflinePlayer getPlayer()
 	{
-		return this.session;
+		return Bukkit.getOfflinePlayer(UUID.fromString(this.uuid));
 	}
 	
 	public boolean isCancelled()

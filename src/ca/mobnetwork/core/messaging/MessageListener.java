@@ -7,6 +7,11 @@ import java.io.IOException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+/**
+ * Main cross messaging listener
+ * @author Benliam12
+ * @version 1.0
+ */
 public class MessageListener implements PluginMessageListener
 {
 
