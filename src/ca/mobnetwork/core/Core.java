@@ -10,6 +10,7 @@ import ca.mobnetwork.core.data.DataBase;
 import ca.mobnetwork.core.group.GroupManager;
 import ca.mobnetwork.core.listeners.PlayerListener;
 import ca.mobnetwork.core.messaging.MessageListener;
+import ca.mobnetwork.core.permissions.PermissionManager;
 import ca.mobnetwork.core.sessions.SessionManager;
 
 
@@ -24,15 +25,19 @@ public class Core extends JavaPlugin
 	private SettingManager settingManager;
 	private DataBase dataBase;
 	private GroupManager groupManager;
+	private PermissionManager permissionManager;
+	private static Core core;
 
 	public static Logger log = Logger.getLogger("minecraft");
 	
 	public void onEnable()
 	{
+		core = this;
 		this.sessionManager = SessionManager.getInstance();
 		this.settingManager = SettingManager.getInstance();
 		this.dataBase = DataBase.getInstance();
 		this.groupManager = GroupManager.getInstance();
+		this.permissionManager = PermissionManager.getInstance();
 		
 		Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		this.settingManager.setup();
@@ -54,9 +59,12 @@ public class Core extends JavaPlugin
 		getCommand("setgroup").setExecutor(commands);
 		getCommand("creategroup").setExecutor(commands);
 		getCommand("deletegroup").setExecutor(commands);
+		getCommand("checkperm").setExecutor(commands);
 		
 		this.groupManager.setup();
 		this.sessionManager.setup();
+		this.permissionManager.setup();
+		//this.permissionManager.setup();
 	}
 	
 	public void onDisable()
@@ -64,6 +72,11 @@ public class Core extends JavaPlugin
 		SessionManager.getInstance().end();
 		DataBase.getInstance().end();
 		GroupManager.getInstance().end();
+	}
+	
+	public static Core getInstance()
+	{
+		return core;
 	}
 	
 	public SettingManager getSettingManager()
@@ -84,5 +97,10 @@ public class Core extends JavaPlugin
 	public GroupManager getGroupManager()
 	{
 		return this.groupManager;
+	}
+	
+	public PermissionManager getPermissionManager()
+	{
+		return this.permissionManager;
 	}
 }

@@ -3,10 +3,14 @@ package ca.mobnetwork.core.group;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
 
 import ca.mobnetwork.core.data.DataBase;
+import ca.mobnetwork.core.permissions.PermissionManager;
 
 /**
  * Rank object
@@ -21,6 +25,8 @@ public class Rank
 	private String color;
 	private String prefix;
 	private int id;
+	private ArrayList<String> permissions = new ArrayList<>();
+	private PermissionManager permissionManager = PermissionManager.getInstance();
 
 	
 	public Rank(int id, String name, String color, String prefix, String format)
@@ -30,6 +36,50 @@ public class Rank
 		this.color = color;
 		this.prefix = prefix;
 		this.format = format;
+	}
+	
+	public Rank addPermission(String permission)
+	{
+		if(!this.hasPermission(permission))
+		{
+			this.permissions.add(permission);
+		}
+		return this;
+	}
+	
+	public void addPermission(String[] permissions)
+	{
+		for(String perm : permissions)
+		{
+			this.addPermission(perm);
+		}
+	}
+	
+	public Rank removePermission(String permission)
+	{
+		for(String perm : this.permissions)
+		{
+			if(perm.equalsIgnoreCase(permission))
+			{
+				this.permissions.remove(perm);
+				return this;
+			}
+		}
+		return this;
+	}
+	
+	/**
+	 * Inject the player permissions
+	 * 
+	 * @param player Player object
+	 */
+	public void injectPlayer(Player player)
+	{
+		PermissionAttachment permissionAttachment = this.permissionManager.getPlayerPermissionAttachment(player);
+		for(String permission : this.permissions)
+		{
+			permissionAttachment.setPermission(permission, true);
+		}
 	}
 	
 	/**
@@ -81,17 +131,33 @@ public class Rank
 	public void save()
 	{
 		Connection connection = DataBase.getInstance().getConnection("main");
+		String lPerm = "";
+		for(String perm : this.permissions)
+		{
+			if(lPerm.length() > 0)
+			{
+				lPerm = lPerm + "," + perm;
+			}
+			else
+			{
+				lPerm = perm;
+			}
+		}
 		try
 		{
-			String sql = "UPDATE `rank` SET name = ?, prefix = ?, format = ?, color = ? WHERE id = ?";
+			String sql = "UPDATE `rank` SET name = ?, prefix = ?, format = ?, color = ?, perms = ? WHERE id = ?";
 			PreparedStatement request = connection.prepareStatement(sql);
 			request.setString(1, this.name);
 			request.setString(2, this.prefix);
 			request.setString(3, this.format);
 			request.setString(4, this.color);
-			request.setString(4, Integer.toString(this.id));
+			request.setString(5, lPerm);
+			request.setString(6, Integer.toString(this.id));
 			request.executeUpdate();
 			request.close();
+			
+			// Saving perms that could have been added or removed
+		
 		}
 		catch (Exception ex)
 		{
@@ -216,6 +282,35 @@ public class Rank
 	public int getID()
 	{
 		return this.id;
+	}
+	
+	public String getPermission(String permission)
+	{
+		for(String perm : this.permissions)
+		{
+			if(perm.equalsIgnoreCase(permission))
+			{
+				return perm;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get if the rank has a specific permission
+	 * 
+	 * @return boolean
+	 */
+	public boolean hasPermission(String permission)
+	{
+		for(String perm : this.permissions)
+		{
+			if(perm.equalsIgnoreCase(permission))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

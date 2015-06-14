@@ -50,7 +50,6 @@ public class GroupManager
 	public void reload()
 	{
 		Core.log.info("Cleaning ranks...");
-		this.ranks.clear();
 		try
 		{
 			String sql = "SELECT * FROM `rank`";
@@ -63,9 +62,22 @@ public class GroupManager
 				String format = result.getString("format");
 				String color = result.getString("color");
 				String prefix = result.getString("prefix");
-				Rank rank = new Rank(id,name,color,prefix,format);
-				this.ranks.add(rank);
-				Core.log.info("Add rank : " + name);
+				String[] perms = result.getString("perms").split(",");
+				if(this.getRank(id) != null)
+				{
+					Rank rank = this.getRank(id);
+					rank.setName(name)
+					.setFormat(format)
+					.setPrefix(prefix)
+					.addPermission(perms);
+				}
+				else
+				{
+					Rank rank = new Rank(id,name,color,prefix,format);
+					rank.addPermission(perms);
+					this.ranks.add(rank);
+					Core.log.info("Add rank : " + name);
+				}
 			}
 		}
 		
@@ -112,7 +124,7 @@ public class GroupManager
 	{
 		if(this.getRank(name) == null)
 		{
-			String sql = "INSERT INTO `rank` VALUE(0,?,null,null,null)";
+			String sql = "INSERT INTO `rank` VALUE(0,?,null,null,null,null)";
 			PreparedStatement request = this.dataBase.getConnection("main").prepareStatement(sql);
 			request.setString(1, name);
 			request.executeUpdate();
@@ -141,7 +153,7 @@ public class GroupManager
 			boolean isResult = result.next();
 			if(!isResult)
 			{
-				String req = "INSERT INTO `users` VALUES(0,?,0,0,0,0,0,0)";
+				String req = "INSERT INTO `users` VALUES(0,?,0,0,0,0,0,core.member,0)";
 				PreparedStatement insert = this.dataBase.getConnection("main").prepareStatement(req);
 				insert.setString(1, uuid);
 				insert.executeUpdate();

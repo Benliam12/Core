@@ -34,7 +34,7 @@ public class SessionManager {
 		{
 			try
 			{
-				this.addSession(player.getName());
+				this.addSession(player.getName()).checkUp();
 			}
 			catch(SessionException se)
 			{
@@ -62,7 +62,7 @@ public class SessionManager {
 	 * @param name Player's name
 	 * @throws SessionException if session already exists
 	 */
-	public void addSession(String name) throws SessionException
+	public Session addSession(String name) throws SessionException
 	{
 		if(!this.isSession(name))
 		{
@@ -71,8 +71,10 @@ public class SessionManager {
 			Bukkit.getPluginManager().callEvent(addSessionEvent);
 			if(!addSessionEvent.isCancelled())
 			{
-				this.sessions.put(name,session);	
+				this.sessions.put(name,session);
+				return session;
 			}
+			return null;
 		}
 		else
 		{

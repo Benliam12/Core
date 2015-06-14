@@ -13,6 +13,7 @@ import ca.mobnetwork.core.SettingManager;
 import ca.mobnetwork.core.data.DataBase;
 import ca.mobnetwork.core.group.GroupManager;
 import ca.mobnetwork.core.group.Rank;
+import ca.mobnetwork.core.permissions.PermissionManager;
 
 /**
  * Session object
@@ -53,15 +54,21 @@ public class Session
 			{
 				try
 				{
-					String req = "INSERT INTO `users` VALUES(0,?,0,0,0,0,0,0)";
+					String req = "INSERT INTO `users` VALUES(0,?,0,0,0,0,0,?,0)";
 					PreparedStatement insert = this.dataBase.prepareStatement(req);
 					insert.setString(1, player.getUniqueId().toString());
+					insert.setString(2, "core.member");
 					insert.executeUpdate();
 					this.putData("rank", this.groupManager.getRank(0));
+				}
+				catch (SessionException sessionException)
+				{
+					
 				}
 				catch (Exception ex)
 				{
 					player.kickPlayer(ChatColor.RED + "Error has occured !");
+					ex.printStackTrace();
 				}
 			
 			}
@@ -80,9 +87,14 @@ public class Session
 						this.putData("rank", this.groupManager.getRank(0));
 					}
 				}
+				catch (SessionException sessionException)
+				{
+					
+				}
 				catch (Exception ex)
 				{
 					player.kickPlayer(ChatColor.RED + "Error has occured !");
+					ex.printStackTrace();
 				}
 				
 			}
@@ -104,6 +116,7 @@ public class Session
 			return;
 		}
 		this.settingManager.removeConfig(this.uuid);
+		PermissionManager.getInstance().removePlayer(this.uuid);
 	}
 	
 	/**

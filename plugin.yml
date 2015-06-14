@@ -1,8 +1,9 @@
 name : Core
-version : 1.2.2
+version : 1.2.3
 author : Benliam12
 main : ca.mobnetwork.core.Core
 commands :
   setgroup:
   creategroup:
   deletegroup:
+  checkperm:

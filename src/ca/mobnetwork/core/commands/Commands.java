@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import ca.mobnetwork.core.group.GroupManager;
 import ca.mobnetwork.core.group.RankException;
@@ -131,6 +132,24 @@ public class Commands implements CommandExecutor
 				else
 				{
 					player.sendMessage(ChatColor.RED + "You don't have the permission to perform this command !");
+				}
+			}
+			else if(label.equalsIgnoreCase("checkperm"))
+			{
+				if(args.length == 1)
+				{
+					Player target = Bukkit.getPlayer(args[0]);
+					if(target != null)
+					{
+					 for(PermissionAttachmentInfo perm : target.getEffectivePermissions())
+					 {
+						 player.sendMessage(perm.getPermission());
+					 }
+					}
+					else
+					{
+						player.sendMessage(ChatColor.RED + "Player offline !");
+					}
 				}
 			}
 		}
