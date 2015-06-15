@@ -101,10 +101,10 @@ public class PermissionManager
 		Session session = SessionManager.getInstance().getSession(player.getName());
 		Rank rank = (Rank) session.getData("rank");
 		String permissionList = (String) session.getData("permissionArray");
-		String[] permissionArray = permissionList.split(",");
-
-		if(permissionArray != null)
+	
+		if(permissionList != null)
 		{
+			String[] permissionArray = permissionList.split(",");
 			PermissionAttachment permissionAttachment = this.permissions.get(player.getUniqueId());
 			for(String permission : permissionArray)
 			{

@@ -28,7 +28,6 @@ public class Session
 	private HashMap<String,Object> data = new HashMap<String,Object>();
 	private SettingManager settingManager = SettingManager.getInstance();
 	private GroupManager groupManager = GroupManager.getInstance();
-	private Connection dataBase = DataBase.getInstance().getConnection("main");
 	
 	public Session(Player player)
 	{
@@ -44,9 +43,10 @@ public class Session
 	public void checkUp()
 	{
 		Player player = Bukkit.getPlayer(this.name);
+		Connection dataBase = DataBase.getInstance().getConnection("main");
 		try
 		{
-			PreparedStatement request = this.dataBase.prepareStatement("SELECT * FROM `users` WHERE uuid = ?");
+			PreparedStatement request = dataBase.prepareStatement("SELECT * FROM `users` WHERE uuid = ?");
 			request.setString(1, player.getUniqueId().toString());
 			ResultSet result = request.executeQuery();
 			boolean exist = result.next();
@@ -55,12 +55,13 @@ public class Session
 				try
 				{
 					String req = "INSERT INTO `users` VALUES(0,?,0,0,0,0,0,?,0)";
-					PreparedStatement insert = this.dataBase.prepareStatement(req);
+					PreparedStatement insert = dataBase.prepareStatement(req);
 					insert.setString(1, player.getUniqueId().toString());
 					insert.setString(2, "core.member");
 					insert.executeUpdate();
 					this.putData("rank", this.groupManager.getRank(0));
 					this.putData("permissionsArray", "");
+					insert.close();
 				}
 				catch (SessionException sessionException)
 				{
@@ -87,8 +88,10 @@ public class Session
 					{
 						this.putData("rank", this.groupManager.getRank(0));
 					}
-					this.putData("permissionsArray", result.getString("perms"));
-				}
+					String permissionList = result.getString("perms");
+					if(permissionList != null) this.putData("permissionsArray", result.getString("perms"));
+					
+				} 
 				catch (SessionException sessionException)
 				{
 					
