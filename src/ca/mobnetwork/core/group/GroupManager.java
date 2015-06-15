@@ -25,7 +25,7 @@ public class GroupManager
 	private static GroupManager groupManager = new GroupManager();
 	private ArrayList<Rank> ranks = new ArrayList<>();
 	private DataBase dataBase = DataBase.getInstance();
-	private GroupChecker groupChecker;
+	private int groupChecker;
 	
 	public static GroupManager getInstance()
 	{
@@ -36,17 +36,18 @@ public class GroupManager
 	
 	public void setup()
 	{
-		this.groupChecker = new GroupChecker();
-		Thread thread = new Thread(this.groupChecker);
-		thread.start();
+		this.groupChecker = Bukkit.getScheduler().scheduleSyncRepeatingTask(Core.getInstance(), new GroupChecker(), 0, 20 * 300);
 		this.reload();
 	}
 	
 	public void end()
 	{
-		this.groupChecker.setRunning(false);
+		Bukkit.getScheduler().cancelTask(this.groupChecker);
 	}
 	
+	/**
+	 * Method run when reloading groups
+	 */
 	public void reload()
 	{
 		Core.log.info("Cleaning ranks...");
@@ -87,6 +88,13 @@ public class GroupManager
 		}
 	}
 	
+	/**
+	 * Permanatly delete a rank.
+	 * 
+	 * @param name Rank name
+	 * @return Group name
+	 * @throws RankException If something when wrong
+	 */
 	public String deleteRank(String name) throws RankException
 	{
 		Rank rank = this.getRank(name);
@@ -96,7 +104,14 @@ public class GroupManager
 		}
 		throw new RankException("Rank not found !");
 	}
-	
+
+	/**
+	 * Permanatly delete a rank.
+	 * 
+	 * @param id Rank ID
+	 * @return Group name
+	 * @throws RankException If something when wrong
+	 */
 	public String deleteRank(int id) throws RankException
 	{
 		Rank rank = this.getRank(id);
@@ -107,6 +122,13 @@ public class GroupManager
 		throw new RankException("Rank not found !");
 	}
 	
+	/**
+	 * Permanatly delete a rank.
+	 * 
+	 * @param rank Rank object
+	 * @return Group name
+	 * @throws RankException If something when wrong
+	 */
 	public String deleteRank(Rank rank) throws RankException
 	{
 		try
@@ -120,6 +142,13 @@ public class GroupManager
 		}
 	}
 	
+	/**
+	 * Creating a new group
+	 * 
+	 * @param name Group name
+	 * @throws RankException If something relative to rank went wrong
+	 * @throws SQLException If something relative do DataBase went wrong
+	 */
 	public void createGroup(String name) throws RankException, SQLException
 	{
 		if(this.getRank(name) == null)
@@ -135,6 +164,12 @@ public class GroupManager
 		}
 	}
 	
+	/**
+	 * Implementing essentials data to specefic player
+	 * 
+	 * @param param 
+	 * @param isUUID If the param is a UUID (true) or a player name (false)
+	 */
 	public void checkUpUser(String param, boolean isUUID)
 	{
 		String uuid = param;
@@ -165,6 +200,13 @@ public class GroupManager
 		}
 	}
 	
+	/**
+	 * Set a player grroup
+	 * 
+	 * @param uuid Player uuid 
+	 * @param groupName The name of the targed group
+	 * @throws RankException If something went wrong
+	 */
 	public void setUserGroup(String uuid, String groupName) throws RankException
 	{
 		if(this.getRank(groupName) == null)
@@ -177,6 +219,13 @@ public class GroupManager
 		}
 	}
 	
+	/**
+	 * Set a player grroup
+	 * 
+	 * @param uuid Player uuid 
+	 * @param groupId The id of the targed group
+	 * @throws RankException If something went wrong
+	 */
 	public void setUserGroup(String uuid, int groupId) throws RankException
 	{
 		if(this.getRank(groupId) == null)
@@ -211,11 +260,22 @@ public class GroupManager
 		}
 	}
 	
+	/**
+	 * Get the rank list
+	 * 
+	 * @return List of rank
+	 */
 	public ArrayList<Rank> getRanks()
 	{
 		return this.ranks;
 	}
 	
+	/**
+	 * Get a specific rank
+	 * 
+	 * @param name Rank name
+	 * @return Asked rank (null if not exist)
+	 */
 	public Rank getRank(String name)
 	{
 		for(Rank rank : this.ranks)
@@ -227,7 +287,13 @@ public class GroupManager
 		}
 		return null;
 	}
-	
+
+	/**
+	 * Get a specific rank
+	 * 
+	 * @param id Rank id
+	 * @return Asked rank (null if not exist)
+	 */
 	public Rank getRank(int id)
 	{
 		for(Rank rank : this.ranks)

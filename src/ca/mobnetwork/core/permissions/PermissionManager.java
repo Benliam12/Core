@@ -97,11 +97,23 @@ public class PermissionManager
 	 */
 	public void injectPlayer(Player player) throws SessionException
 	{
+		this.permissions.put(player.getUniqueId(), player.addAttachment(Core.getInstance()));
 		Session session = SessionManager.getInstance().getSession(player.getName());
 		Rank rank = (Rank) session.getData("rank");
+		String permissionList = (String) session.getData("permissionArray");
+		String[] permissionArray = permissionList.split(",");
+
+		if(permissionArray != null)
+		{
+			PermissionAttachment permissionAttachment = this.permissions.get(player.getUniqueId());
+			for(String permission : permissionArray)
+			{
+				permissionAttachment.setPermission(permission, true);
+			}
+		}
+		
 		if(rank != null)
 		{
-			this.permissions.put(player.getUniqueId(), player.addAttachment(Core.getInstance()));
 			rank.injectPlayer(player);
 		}
 		else

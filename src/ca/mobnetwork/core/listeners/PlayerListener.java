@@ -21,6 +21,7 @@ public class PlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoin(PlayerJoinEvent e)
 	{
+		// Adding Player session
 		try
 		{
 			this.sessionManager.addSession(e.getPlayer().getName());
@@ -34,6 +35,8 @@ public class PlayerListener implements Listener
 			}
 			// Session has not expired
 		}
+		
+		// Adding player Permissions
 		try {
 			PermissionManager.getInstance().injectPlayer(e.getPlayer());
 		} 

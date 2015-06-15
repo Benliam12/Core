@@ -60,6 +60,7 @@ public class Session
 					insert.setString(2, "core.member");
 					insert.executeUpdate();
 					this.putData("rank", this.groupManager.getRank(0));
+					this.putData("permissionsArray", "");
 				}
 				catch (SessionException sessionException)
 				{
@@ -86,6 +87,7 @@ public class Session
 					{
 						this.putData("rank", this.groupManager.getRank(0));
 					}
+					this.putData("permissionsArray", result.getString("perms"));
 				}
 				catch (SessionException sessionException)
 				{

@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import ca.mobnetwork.core.Core;
 import ca.mobnetwork.core.events.AddSessionEvent;
 
 /**
@@ -18,7 +19,7 @@ public class SessionManager {
 	private static SessionManager instance = new SessionManager();
 	
 	private HashMap<String,Session> sessions = new HashMap<String,Session>();
-	private SessionCleaner sessionCleaner;
+	private int sessionCleaner;
 	
 	public static SessionManager getInstance()
 	{
@@ -41,9 +42,7 @@ public class SessionManager {
 				
 			}
 		}
-		this.sessionCleaner = new SessionCleaner();
-		Thread thread = new Thread(this.sessionCleaner);
-		thread.start();
+		this.sessionCleaner = Bukkit.getScheduler().scheduleSyncRepeatingTask(Core.getInstance(), new SessionCleaner(), 0, 20 * 120);
 	}
 	
 	/**
@@ -51,14 +50,12 @@ public class SessionManager {
 	 */
 	public void end()
 	{
-		if(this.sessionCleaner != null)
-		{
-			this.sessionCleaner.end();
-		}
+		Bukkit.getScheduler().cancelTask(this.sessionCleaner);
 	}
 	
 	/**
 	 * Add a new session 
+	 * 
 	 * @param name Player's name
 	 * @throws SessionException if session already exists
 	 */
@@ -84,6 +81,7 @@ public class SessionManager {
 	
 	/**
 	 * Remove a session from the current server
+	 * 
 	 * @param name Player's name
 	 * @throws SessionException if session doesn't exists 
 	 */
@@ -100,6 +98,12 @@ public class SessionManager {
 		}
 	}
 	
+	/**
+	 * Check if user has a session
+	 * 
+	 * @param name Session name
+	 * @return True / Fase if session exist or not
+	 */
 	public boolean isSession(String name)
 	{
 		return this.sessions.containsKey(name);
@@ -107,14 +111,22 @@ public class SessionManager {
 	
 	/**
 	 * Get a specific session
+	 * 
 	 * @param sessionkey Username of the player is use as the sessionkey
-	 * @return The session asked or null if not exits
+	 * @return The session asked or null if not exist
 	 */
 	public Session getSession(String sessionkey)
 	{
 		return this.sessions.get(sessionkey);
 	}
 	
+	/**
+	 * Get a specifc session
+	 * 
+	 * @param param UUID
+	 * @param useUUID Confirm it's a uuid. If false please use getSession(String sessionkey).
+	 * @return The session asked of null if not exist
+	 */
 	public Session getSession(String param, boolean useUUID)
 	{
 		if(!useUUID)
@@ -133,11 +145,11 @@ public class SessionManager {
 	
 	/**
 	 * Get all the sessions
+	 * 
 	 * @return all the sessions
 	 */
 	public HashMap<String,Session> getSessions()
 	{
 		return this.sessions;
 	}
-	
 }
