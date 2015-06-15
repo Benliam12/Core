@@ -134,11 +134,38 @@ public class GroupManager
 		try
 		{
 			rank.delete();
+			this.removeRank(rank);
 			return rank.getName();
 		}
 		catch (SQLException ex)
 		{
 			throw new RankException("Couldn't delete Rank : " + rank.getName() + " (ERR : "+ ex.getMessage() + ")", rank);
+		}
+	}
+	
+	/**
+	 * Add a rank to rank list
+	 * 
+	 * @param rank
+	 */
+	public void addRank(Rank rank)
+	{
+		if(this.getRank(rank.getName()) == null)
+		{
+			this.ranks.add(rank);
+		}
+	}
+	
+	/**
+	 * Remove a rank from the list
+	 * 
+	 * @param rank
+	 */
+	public void removeRank(Rank rank)
+	{
+		if(this.getRank(rank.getName()) != null)
+		{
+			this.ranks.remove(rank);
 		}
 	}
 	
@@ -153,10 +180,18 @@ public class GroupManager
 	{
 		if(this.getRank(name) == null)
 		{
-			String sql = "INSERT INTO `rank` VALUE(0,?,null,null,null,null)";
+			String sql = "INSERT INTO `rank` VALUE(0,?,?,?,?,?,?,?)";
 			PreparedStatement request = this.dataBase.getConnection("main").prepareStatement(sql);
 			request.setString(1, name);
+			request.setString(2, "7");
+			request.setString(3, "%player% : %message%");
+			request.setString(4, "&7");
+			request.setString(5, "");;
+			request.setString(6, "0");
+			request.setString(7, Integer.toString(Math.round(System.currentTimeMillis() / 1000)));
 			request.executeUpdate();
+			
+			this.addRank(new Rank(name));
 		}
 		else
 		{
@@ -188,9 +223,10 @@ public class GroupManager
 			boolean isResult = result.next();
 			if(!isResult)
 			{
-				String req = "INSERT INTO `users` VALUES(0,?,0,0,0,0,0,core.member,0)";
+				String req = "INSERT INTO `users` VALUES(0,?,0,0,0,0,0,?,0)";
 				PreparedStatement insert = this.dataBase.getConnection("main").prepareStatement(req);
 				insert.setString(1, uuid);
+				insert.setString(2, "");
 				insert.executeUpdate();
 			}	
 		}

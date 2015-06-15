@@ -2,6 +2,7 @@ package ca.mobnetwork.core.group;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -28,6 +29,28 @@ public class Rank
 	private ArrayList<String> permissions = new ArrayList<>();
 	private PermissionManager permissionManager = PermissionManager.getInstance();
 
+	public Rank(String name)
+	{
+		try
+		{
+			String sql = "SELECT * FROM `rank` WHERE name = ?";
+			PreparedStatement request = DataBase.getInstance().getConnection("main").prepareStatement(sql);
+			request.setString(1, name);	
+			ResultSet resultSet = request.executeQuery();
+			if(resultSet.next())
+			{
+				this.id = resultSet.getInt("id"); 
+				this.name = name;
+				this.color = resultSet.getString("color"); 
+				this.prefix = resultSet.getString("prefix");
+				this.format = resultSet.getString("format");
+			}
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
 	
 	public Rank(int id, String name, String color, String prefix, String format)
 	{

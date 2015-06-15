@@ -3,7 +3,10 @@ package ca.mobnetwork.core.sessions;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
+
 import ca.mobnetwork.core.Core;
+import ca.mobnetwork.core.events.RemoveSessionEvent;
 
 /**
  * Session cleaner
@@ -25,8 +28,13 @@ public class SessionCleaner implements Runnable
 			if(!session.isOnline())
 			{
 				try {
-					this.sessionManager.removeSession(session.getName());
-					Core.log.info("Session with name : "+ session.getName() + " was removed !");
+					RemoveSessionEvent removeSessionEvent = new RemoveSessionEvent(session);
+					Bukkit.getPluginManager().callEvent(removeSessionEvent);
+					if(!removeSessionEvent.isCancelled())
+					{
+						this.sessionManager.removeSession(session.getName());
+						Core.log.info("Session with name : "+ session.getName() + " was removed !");
+					}
 				} catch (SessionException e) {
 					Core.log.info("Could remove Session with name " + session.getName());
 				}
