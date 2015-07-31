@@ -25,15 +25,14 @@ public class PlayerListener implements Listener
 		try
 		{
 			this.sessionManager.addSession(e.getPlayer().getName());
-			//PermissionManager.getInstance().injectPlayer(e.getPlayer());
 		}
 		catch(SessionException sessionException)
 		{
+			// Session has not expired
 			if(sessionException.getSession() != null)
 			{
 				sessionException.getSession().checkUp();
 			}
-			// Session has not expired
 		}
 		
 		// Adding player Permissions

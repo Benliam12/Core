@@ -20,12 +20,13 @@ import ca.mobnetwork.core.permissions.PermissionManager;
  */
 public class Rank 
 {
-
+	private int id;
+	
 	private String format;
 	private String name;
 	private String color;
 	private String prefix;
-	private int id;
+	
 	private ArrayList<String> permissions = new ArrayList<>();
 	private PermissionManager permissionManager = PermissionManager.getInstance();
 
@@ -61,6 +62,12 @@ public class Rank
 		this.format = format;
 	}
 	
+	/**
+	 * Adding a single Permission to permission list
+	 * 
+	 * @param permission
+	 * @return Current object
+	 */
 	public Rank addPermission(String permission)
 	{
 		if(!this.hasPermission(permission))
@@ -70,6 +77,11 @@ public class Rank
 		return this;
 	}
 	
+	/**
+	 * Adding list of permissions to permission list
+	 * 
+	 * @param permissions
+	 */
 	public void addPermission(String[] permissions)
 	{
 		for(String perm : permissions)
@@ -78,6 +90,12 @@ public class Rank
 		}
 	}
 	
+	/**
+	 * Remove a permission from the permission list
+	 * 
+	 * @param permission
+	 * @return Current object
+	 */
 	public Rank removePermission(String permission)
 	{
 		for(String perm : this.permissions)
@@ -256,7 +274,7 @@ public class Rank
 	}
 	
 	/**
-	 * ¸Get the rank prefix
+	 * Get the rank prefix
 	 * 
 	 * @return Rank prefix
 	 */

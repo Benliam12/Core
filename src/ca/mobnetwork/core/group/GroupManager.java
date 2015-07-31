@@ -23,9 +23,10 @@ public class GroupManager
 {
 
 	private static GroupManager groupManager = new GroupManager();
+	private int groupChecker;
 	private ArrayList<Rank> ranks = new ArrayList<>();
 	private DataBase dataBase = DataBase.getInstance();
-	private int groupChecker;
+	
 	
 	public static GroupManager getInstance()
 	{

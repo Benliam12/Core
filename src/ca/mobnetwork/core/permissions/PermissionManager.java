@@ -98,6 +98,8 @@ public class PermissionManager
 	public void injectPlayer(Player player) throws SessionException
 	{
 		this.permissions.put(player.getUniqueId(), player.addAttachment(Core.getInstance()));
+		
+		//Initializing variables
 		Session session = SessionManager.getInstance().getSession(player.getName());
 		Rank rank = (Rank) session.getData("rank");
 		String permissionList = (String) session.getData("permissionArray");

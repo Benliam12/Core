@@ -61,6 +61,8 @@ public class Session
 					insert.executeUpdate();
 					this.putData("rank", this.groupManager.getRank(0));
 					this.putData("permissionsArray", "");
+					this.putData("golds", 0);
+					this.putData("tokens", 0);
 					insert.close();
 				}
 				catch (SessionException sessionException)
@@ -88,6 +90,8 @@ public class Session
 					{
 						this.putData("rank", this.groupManager.getRank(0));
 					}
+					this.putData("golds", result.getInt("golds"));
+					this.putData("tokens", result.getInt("tokens"));
 					String permissionList = result.getString("perms");
 					if(permissionList != null) this.putData("permissionsArray", result.getString("perms"));
 					
@@ -126,6 +130,7 @@ public class Session
 	
 	/**
 	 * Adding data to the session
+	 * 
 	 * @param datakey Name of the data
 	 * @param data Data it self
 	 * @throws SessionException if the name of the data is already registed
@@ -144,6 +149,7 @@ public class Session
 	
 	/**
 	 * Updating already registed data
+	 * 
 	 * @param key Data name
 	 * @param data new Data
 	 */
@@ -168,6 +174,7 @@ public class Session
 
 	/**
 	 * If the data is registed
+	 * 
 	 * @param datakey Data name
 	 * @return
 	 */
@@ -178,6 +185,7 @@ public class Session
 	
 	/**
 	 * If the session's owner is online
+	 * 
 	 * @return
 	 */
 	public boolean isOnline()
@@ -192,6 +200,7 @@ public class Session
 	
 	/**
 	 * Getting a specific data
+	 * 
 	 * @param datakey Data name
 	 * @return null if not data found
 	 */
@@ -202,6 +211,7 @@ public class Session
 	
 	/**
 	 * Getting the name of the session
+	 * 
 	 * @return
 	 */
 	public String getName()
@@ -209,6 +219,11 @@ public class Session
 		return this.name;
 	}
 	
+	/**
+	 * Getting the uuid of the session's owner
+	 * 
+	 * @return
+	 */
 	public String getUUID()
 	{
 		return this.uuid;

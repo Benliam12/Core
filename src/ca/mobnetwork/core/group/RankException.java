@@ -23,11 +23,19 @@ public class RankException extends Exception
 		this.rank = rank;
 	}
 	
+	/**
+	 * Getting the rank related to the exception
+	 * 
+	 * @return
+	 */
 	public Rank getRank()
 	{
 		return this.rank;
 	}
 	
+	/**
+	 * Getting the error message
+	 */
 	public String getMessage()
 	{
 		return this.message;

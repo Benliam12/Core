@@ -33,16 +33,21 @@ public class Core extends JavaPlugin
 	public void onEnable()
 	{
 		core = this;
+		//Initializing Managers
 		this.sessionManager = SessionManager.getInstance();
 		this.settingManager = SettingManager.getInstance();
 		this.dataBase = DataBase.getInstance();
 		this.groupManager = GroupManager.getInstance();
 		this.permissionManager = PermissionManager.getInstance();
 		
+		//Registering Listeners
 		Bukkit.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+		
+		//Setting up priority managers
 		this.settingManager.setup();
 		this.dataBase.setup();
 		
+		//Checking if database available 
 		if(!this.dataBase.isConnect("main"))
 		{
 			log.info("Couldn't connect to main database !");
@@ -50,25 +55,28 @@ public class Core extends JavaPlugin
 			return;
 		}
 		
+		//Registering Channel Messaging
 		Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new MessageListener());
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		Bukkit.getMessenger().registerIncomingPluginChannel(this, "MobNetwork", new MessageListener());
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "MobNetwork");
 		
+		//Setting up commands
 		Commands commands = new Commands();
 		getCommand("setgroup").setExecutor(commands);
 		getCommand("creategroup").setExecutor(commands);
 		getCommand("deletegroup").setExecutor(commands);
 		getCommand("checkperm").setExecutor(commands);
 		
+		//Setting up other managers
 		this.groupManager.setup();
 		this.sessionManager.setup();
 		this.permissionManager.setup();
-		//this.permissionManager.setup();
 	}
 	
 	public void onDisable()
 	{
+		//Disabling managers
 		SessionManager.getInstance().end();
 		DataBase.getInstance().end();
 		GroupManager.getInstance().end();
