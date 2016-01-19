@@ -1,9 +1,12 @@
 package ca.mobnetwork.core.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 
 import ca.mobnetwork.core.permissions.PermissionManager;
 import ca.mobnetwork.core.sessions.SessionException;
@@ -43,6 +46,11 @@ public class PlayerListener implements Listener
 		{
 			sessionException.printStackTrace();
 		}
+	}
+	
+	public void onBlockBreak(BlockBreakEvent e)
+	{
+		e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), new ItemStack(Material.IRON_INGOT));
 	}
 	
 }
