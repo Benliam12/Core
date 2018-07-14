@@ -45,13 +45,14 @@ public class DataBase
 	public synchronized void load()
 	{
 		FileConfiguration config = SettingManager.getInstance().getConfig("config");
-		for(String name : config.getConfigurationSection("").getKeys(false))
+		for(String name : config.getConfigurationSection("db").getKeys(false))
 		{
-			String host = config.getString(name + ".host");
-			String db = config.getString(name + ".db");
-			String user = config.getString(name + ".user");
-			String password = config.getString(name + ".password");
-			int port = config.getInt(name + ".port");
+			String host = config.getString("db." + name + ".host");
+			String db = config.getString("db." + name + ".db");
+			String user = config.getString("db." + name + ".user");
+			String password = config.getString("db." + name + ".password");
+
+			int port = config.getInt("db." + name + ".port");
 
 			String url = "jdbc:mysql://"+host+":"+port+"/" + db;
 			try 
